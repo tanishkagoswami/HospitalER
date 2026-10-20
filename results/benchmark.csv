@@ -1,0 +1,28 @@
+experiment,structure,n,millis
+insert_extract,IndexedMaxHeap (ours),1000,0.93
+insert_extract,java.util.PriorityQueue,1000,1.72
+insert_extract,SortedArray,1000,0.94
+insert_extract,UnsortedArray,1000,1.53
+insert_extract,IndexedMaxHeap (ours),5000,2.94
+insert_extract,java.util.PriorityQueue,5000,3.30
+insert_extract,SortedArray,5000,1.72
+insert_extract,UnsortedArray,5000,31.40
+insert_extract,IndexedMaxHeap (ours),20000,8.00
+insert_extract,java.util.PriorityQueue,20000,6.90
+insert_extract,SortedArray,20000,9.07
+insert_extract,UnsortedArray,20000,749.84
+insert_extract,IndexedMaxHeap (ours),50000,18.65
+insert_extract,java.util.PriorityQueue,50000,17.16
+insert_extract,SortedArray,50000,58.86
+insert_extract,UnsortedArray,50000,6337.42
+insert_extract,IndexedMaxHeap (ours),200000,157.16
+insert_extract,java.util.PriorityQueue,200000,118.58
+insert_extract,SortedArray,200000,1017.71
+insert_extract,IndexedMaxHeap (ours),1000000,1070.86
+insert_extract,java.util.PriorityQueue,1000000,1021.78
+update_priority,IndexedMaxHeap,10000,0.46
+update_priority,java.util.PriorityQueue,10000,21.88
+update_priority,IndexedMaxHeap,50000,1.44
+update_priority,java.util.PriorityQueue,50000,29.65
+update_priority,IndexedMaxHeap,100000,1.43
+update_priority,java.util.PriorityQueue,100000,69.43
