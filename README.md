@@ -254,7 +254,7 @@ O(log n). A full run is O(P log P) for P patients, plus O(W log W) per aging tic
 ---
 
 
-## 10. Limitations 
+## 9. Limitations 
 
 - The triage score is inspired by early-warning scores but is **not clinically validated**.
 - No pre-emption: a critical patient waits for the panel's next free doctor. In the demo,
@@ -263,7 +263,7 @@ O(log n). A full run is O(P log P) for P patients, plus O(W log W) per aging tic
 - Treatment times are drawn from ranges, not real data. Keyword routing can misplace
   vague complaints into General Medicine.
 
-## 11. Extensions (all priority-queue based)
+## 10. Extensions (all priority-queue based)
 
 - **Pre-emption** for ESI-1: compare the new patient against the heap of in-progress treatments
 - **Cross-panel overflow**: a free doctor takes the top patient of the busiest other panel
