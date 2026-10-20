@@ -253,28 +253,8 @@ O(log n). A full run is O(P log P) for P patients, plus O(W log W) per aging tic
 
 ---
 
-## 9. Viva questions to prepare
 
-1. **Why a heap and not a sorted list?** O(log n) for both insert and extract (benchmark).
-2. **What makes it "indexed"?** Each patient stores its array slot (`heapIndex`), updated
-   on every swap, so update-priority skips the O(n) search.
-3. **How are ties handled?** Equal priority → earlier arrival wins (tested in SelfTest).
-4. **How does disease-wise segregation work?** One max-heap per panel; a panel's doctor
-   only extracts from that panel's heap.
-5. **How are doctors divided between panels?** Greedy with a max-heap keyed by workload
-   per doctor.
-6. **What is starvation and how did you fix it?** Low-priority patients waiting forever;
-   fixed with aging, capped so a minor case never overtakes a high-risk one.
-7. **Why does uniform aging need no heap updates?** If everyone gains k points/min,
-   priority = (score − k·arrival) + k·now; the `k·now` part is the same for everyone,
-   so the order never changes. Updates are needed here only because of the caps.
-8. **How do you get a max-heap from a min-heap?** Reverse the comparator.
-9. **How do you compute a median with a heap?** Insert all values, extract n/2 times
-   (heap sort).
-
----
-
-## 10. Limitations (put these in your report)
+## 10. Limitations 
 
 - The triage score is inspired by early-warning scores but is **not clinically validated**.
 - No pre-emption: a critical patient waits for the panel's next free doctor. In the demo,
