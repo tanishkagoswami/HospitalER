@@ -1,3 +1,6 @@
+Here is your updated `README.md` file, with the new web frontend and Node.js bridge guide integrated smoothly into the setup and operation section:
+
+```markdown
 # Intelligent Hospital Emergency Management System Using Priority Queues
 
 A Java simulation of a hospital Emergency Department (ED), built strictly around
@@ -69,17 +72,20 @@ Every file has a header comment (`FILE n`) explaining what it does and why.
 
 ## 3. How the disease-wise panels work
 
+
 ```
- Patient arrives ──► TriageScorer ──► priority score
-        │
-        ▼  Department.route(chief complaint)
- ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
- │ Cardiology   │ Neurology    │ Trauma&Ortho │ Respiratory  │ Gastro&Abdo  │ General Med  │
- │ max-heap     │ max-heap     │ max-heap     │ max-heap     │ max-heap     │ max-heap     │
- │ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │
- └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-        │  when a panel's doctor is free:
-        ▼  extractMax() from THAT panel's heap → most urgent patient of that disease group
+
+Patient arrives ──► TriageScorer ──► priority score
+│
+▼  Department.route(chief complaint)
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+│ Cardiology   │ Neurology    │ Trauma&Ortho │ Respiratory  │ Gastro&Abdo  │ General Med  │
+│ max-heap     │ max-heap     │ max-heap     │ max-heap     │ max-heap     │ max-heap     │
+│ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │ doctor heap  │
+└──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
+│  when a panel's doctor is free:
+▼  extractMax() from THAT panel's heap → most urgent patient of that disease group
+
 ```
 
 | Panel | Example complaints |
@@ -100,47 +106,84 @@ extracted, given one more doctor, and re-inserted.
 
 **Live demo (option 2)** prints a board every simulated hour, like this real output:
 
+
 ```
+
 ========== PANEL BOARD at Day 1 06:00 (waiting patients, highest priority first) ==========
-  +-- Cardiology          doctors free 0/1 | waiting 1
-  |   1. P00038  ESI-2  priority  122.5  chest pain             waited 58 min  (WORSENED)
-  +-- Gastro & Abdominal  doctors free 0/1 | waiting 1
-  |   1. P00036  ESI-3  priority   76.8  kidney stone           waited 67 min
-  ...
++-- Cardiology         doctors free 0/1 | waiting 1
+|   1. P00038  ESI-2  priority  122.5  chest pain             waited 58 min  (WORSENED)
++-- Gastro & Abdominal doctors free 0/1 | waiting 1
+|   1. P00036  ESI-3  priority   76.8  kidney stone           waited 67 min
+...
+
 ```
 
 ---
 
-## 4. Set up in VS Code
+## 4. Set up and operation
 
-1. Install **JDK 17 or newer** (e.g. Eclipse Temurin 21). Check: `java -version`.
-2. Install the VS Code extension **Extension Pack for Java** (Microsoft).
-3. `File → Open Folder…` and choose the `HospitalER` folder (the one containing `src/`).
+### Prerequisites
+* **Java 17 or newer** (e.g. Eclipse Temurin 21). Check: `java -version`.
+* **Node.js** installed on your system (for running the web frontend bridge).
+* VS Code extension **Extension Pack for Java** (Microsoft).
+
+### Running in VS Code
+1. `File → Open Folder…` and choose the `HospitalER` folder (the one containing `src/`).
    The included `.vscode/` settings tell VS Code that `src/` is the source folder.
-4. Open `src/Main.java` and click **Run** above `main`, or use the Run panel and pick
+2. Open `src/Main.java` and click **Run** above `main`, or use the Run panel and pick
    **Run Hospital ER (menu)**. Type an option number in the terminal.
 
-From a terminal instead (inside `HospitalER/`):
+### Running from Terminal
+Inside the `HospitalER/` directory:
 
 ```bash
 javac -d out $(find src -name "*.java")
-java -cp out Main          # interactive menu
+java -cp out Main         # interactive menu
 java -cp out Main 3        # run one option directly
+
 ```
 
 Windows PowerShell compile command:
+
 ```powershell
 javac -d out (Get-ChildItem -Recurse src -Filter *.java).FullName
+
 ```
 
 Always run from the `HospitalER` folder so `data/` and `results/` are found.
+
+### Web Frontend Operation
+
+A clean, light-themed browser-based interface is included via a lightweight Node.js WebSocket bridge, allowing interaction with the Java backend without modifying core source files:
+
+1. **Install Dependencies (First-time setup only):**
+Open your terminal in the root project directory and install the required WebSocket module:
+```powershell
+npm install ws
+
+```
+
+
+2. **Start the Bridge Server:**
+Launch the Node.js server to link your browser to the Java application:
+```powershell
+node server.js
+
+```
+
+
+*You will see the message: `Bridge server running on http://localhost:8080`.*
+3. **Open the Interface:**
+Navigate to the `frontend` folder and double-click **`index.html`** to open the UI in your browser. The terminal menu options will stream directly into the webpage for real-time interaction.
+
+
 
 ---
 
 ## 5. Menu options
 
 | Option | What happens |
-|---|---|
+| --- | --- |
 | 1 | Self-test (7 tests): heap order, FIFO ties, update-priority, all PQs agree, MinHeap, panel routing, doctor allocation |
 | 2 | Live demo: 40 patients, 6 panels × 1 doctor; every arrival/deterioration/treatment logged, panel boards every hour |
 | 3 | 3 strategies × 7, 8, 10 doctors on 5,000 patients; results by ESI level and by panel → `results/strategy_comparison.csv` |
@@ -153,33 +196,38 @@ Always run from the `HospitalER` folder so `data/` and `results/` are found.
 ## 6. Datasets
 
 ### 6a. Synthetic dataset (included: `data/ed_patients_5000.csv`)
+
 5,000 patients over ~32 days, generated by `DataGenerator` with a fixed seed:
-- **Arrivals**: Poisson process with an hour-of-day rate (quiet ~4 am, busiest ~4 pm),
-  averaging 6.5 patients/hour.
-- **ESI mix**: 1.2% / 12.3% / 42.8% / 30.9% / 12.9% for levels 1–5.
-- **Panel mix**: Cardiology 8% · Neurology 12% · Trauma 18% · Respiratory 12% ·
-  Gastro 23% · General Medicine 27%.
-- **Vitals**: normal distributions whose means depend on ESI.
-- **Treatment time**: ESI-1 60–120 min … ESI-5 5–15 min.
-- **Deterioration**: ~6% of ESI-2/3 patients worsen if still waiting after 10–60 min.
+
+* **Arrivals**: Poisson process with an hour-of-day rate (quiet ~4 am, busiest ~4 pm),
+averaging 6.5 patients/hour.
+* **ESI mix**: 1.2% / 12.3% / 42.8% / 30.9% / 12.9% for levels 1–5.
+* **Panel mix**: Cardiology 8% · Neurology 12% · Trauma 18% · Respiratory 12% ·
+Gastro 23% · General Medicine 27%.
+* **Vitals**: normal distributions whose means depend on ESI.
+* **Treatment time**: ESI-1 60–120 min … ESI-5 5–15 min.
+* **Deterioration**: ~6% of ESI-2/3 patients worsen if still waiting after 10–60 min.
 
 Columns:
+
 ```
 id,age,gender,esi,heart_rate,systolic_bp,spo2,resp_rate,temp_c,pain,
 chief_complaint,department,arrival_min,treatment_min,deteriorate_after_min
+
 ```
 
 ### 6b. Real data: MIMIC-IV-ED (PhysioNet)
+
 De-identified emergency visits from Beth Israel Deaconess Medical Center (Boston). Its
 `triage` table has exactly the vitals this project uses, its `acuity` column **is** the
 ESI level, and `chiefcomplaint` is routed to a panel by keyword.
 
-- **MIMIC-IV-ED Demo**: 100 patients, open access, no login.
-  https://physionet.org/content/mimic-iv-ed-demo/
-  Download, unzip, copy `edstays.csv.gz` and `triage.csv.gz` into
-  `data/mimic-iv-ed-demo/`, then run option 6.
-- **Full MIMIC-IV-ED**: hundreds of thousands of visits. Same file layout, same adapter.
-  Requires a PhysioNet credentialed account and CITI ethics training.
+* **MIMIC-IV-ED Demo**: 100 patients, open access, no login.
+https://physionet.org/content/mimic-iv-ed-demo/
+Download, unzip, copy `edstays.csv.gz` and `triage.csv.gz` into
+`data/mimic-iv-ed-demo/`, then run option 6.
+* **Full MIMIC-IV-ED**: hundreds of thousands of visits. Same file layout, same adapter.
+Requires a PhysioNet credentialed account and CITI ethics training.
 
 The adapter joins `edstays` and `triage` on `stay_id`, converts °F → °C, fills missing
 vitals with normal values, skips rows with no acuity, keeps the real arrival order
@@ -187,6 +235,7 @@ vitals with normal values, skips rows with no acuity, keeps the real arrival ord
 assigns treatment time by ESI.
 
 ### 6c. Any other dataset (e.g. Kaggle)
+
 Write one more adapter that outputs the column format in 6a. The simulator never changes.
 
 ---
@@ -197,7 +246,7 @@ Write one more adapter that outputs the column format in 6a. The simulator never
 Average wait in minutes, worst wait in brackets:
 
 | Level | FIFO | Static priority | Priority + aging |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | ESI-1 | 42.4 (275) | **13.8 (66)** | 14.8 (66) |
 | ESI-2 | 63.1 (766) | **18.9 (281)** | 18.9 (170) |
 | ESI-3 | 40.0 (715) | 30.7 (865) | 45.4 (914) |
@@ -207,24 +256,25 @@ Average wait in minutes, worst wait in brackets:
 By panel, the busiest one is General Medicine (81% busy, 1 doctor):
 
 | General Medicine | FIFO | Static priority | Priority + aging |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Avg wait | 129.0 | 225.5 | 168.0 |
 | Worst wait | 766 | **2124** | **963** |
 | Longest queue | 26 | 42 | 36 |
 
 What it shows:
-- **FIFO** makes an ESI-1 patient wait 42 min on average and ESI-2 up to 766 min.
-- **Static priority** cuts ESI-1/2 waits to ~14–19 min, but in the overloaded General
-  Medicine panel an ESI-5 patient waited 2124 min (~35 h). That is **starvation**.
-- **Aging** keeps ESI-1/2 fast and more than halves the worst wait (2124 → 963).
-- **Segregation has a cost.** One shared pool of 5 doctors handled this load; split into
-  6 panels it needs 7–8, because a free cardiologist can't help a queue in Gastro.
-  That trade-off belongs in your report.
+
+* **FIFO** makes an ESI-1 patient wait 42 min on average and ESI-2 up to 766 min.
+* **Static priority** cuts ESI-1/2 waits to ~14–19 min, but in the overloaded General
+Medicine panel an ESI-5 patient waited 2124 min (~35 h). That is **starvation**.
+* **Aging** keeps ESI-1/2 fast and more than halves the worst wait (2124 → 963).
+* **Segregation has a cost.** One shared pool of 5 doctors handled this load; split into
+6 panels it needs 7–8, because a free cardiologist can't help a queue in Gastro.
+That trade-off belongs in your report.
 
 **Benchmark** (insert N, then extract N; ms; numbers differ by machine):
 
 | N | IndexedMaxHeap | java.util.PriorityQueue | SortedArray | UnsortedArray |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 20,000 | 8.0 | 6.9 | 9.1 | 750 |
 | 50,000 | 18.6 | 17.2 | 58.9 | 6,337 |
 | 200,000 | 157 | 119 | 1,018 | too slow |
@@ -241,7 +291,7 @@ Open the CSVs in `results/` with Excel or Google Sheets to make graphs.
 ## 8. Complexity summary
 
 | Operation | IndexedMaxHeap | java.util.PriorityQueue | Sorted array | Unsorted array |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | insert | O(log n) | O(log n) | O(n) | O(1) |
 | extractMax | O(log n) | O(log n) | O(1) | O(n) |
 | peek | O(1) | O(1) | O(1) | O(n) |
@@ -253,20 +303,23 @@ O(log n). A full run is O(P log P) for P patients, plus O(W log W) per aging tic
 
 ---
 
+## 9. Limitations
 
-## 9. Limitations 
-
-- The triage score is inspired by early-warning scores but is **not clinically validated**.
-- No pre-emption: a critical patient waits for the panel's next free doctor. In the demo,
-  a deteriorating chest-pain patient waited 63 min because the only cardiologist was busy.
-- Panels do not borrow doctors from each other.
-- Treatment times are drawn from ranges, not real data. Keyword routing can misplace
-  vague complaints into General Medicine.
+* The triage score is inspired by early-warning scores but is **not clinically validated**.
+* No pre-emption: a critical patient waits for the panel's next free doctor. In the demo,
+a deteriorating chest-pain patient waited 63 min because the only cardiologist was busy.
+* Panels do not borrow doctors from each other.
+* Treatment times are drawn from ranges, not real data. Keyword routing can misplace
+vague complaints into General Medicine.
 
 ## 10. Extensions (all priority-queue based)
 
-- **Pre-emption** for ESI-1: compare the new patient against the heap of in-progress treatments
-- **Cross-panel overflow**: a free doctor takes the top patient of the busiest other panel
-  (a max-heap of panels keyed by their top patient's priority)
-- **d-ary heap** (e.g. 4-ary) and benchmark it against the binary heap
-- **Pairing heap / Fibonacci heap** for faster decrease/increase-key
+* **Pre-emption** for ESI-1: compare the new patient against the heap of in-progress treatments
+* **Cross-panel overflow**: a free doctor takes the top patient of the busiest other panel
+(a max-heap of panels keyed by their top patient's priority)
+* **d-ary heap** (e.g. 4-ary) and benchmark it against the binary heap
+* **Pairing heap / Fibonacci heap** for faster decrease/increase-key
+
+```
+
+```
