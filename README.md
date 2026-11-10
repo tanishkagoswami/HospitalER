@@ -1,4 +1,3 @@
-Here is your updated `README.md` file, with the new web frontend and Node.js bridge guide integrated smoothly into the setup and operation section:
 
 ```markdown
 # Intelligent Hospital Emergency Management System Using Priority Queues
